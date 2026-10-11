@@ -1,26 +1,34 @@
 from art import logo1
-print(logo1,"\n Welcome to the blind auction.")
-max_bid = 0
-max_name = ""
-more_users = True
-name_and_bid = {}
-while more_users:
-    name = input("Please Enter your name: ")
-    bid = int(input("Please Enter your bid in SAR. (put a number and if there is a tie the person who wrote it first will win): "))
-    name_and_bid[name] = bid
-    add_user = input("Is there more bidders? please Enter yes or no: ")
-    
-    if add_user == "no":
-       more_users = False
 
+
+def get_bid():
+    """Ask for a bid until the user enters a whole number."""
+    while True:
+        bid = input("Please enter your bid in SAR: ")
+        if bid.isdigit():
+            return int(bid)
+        print("Please enter a whole number, like 150.")
+
+
+print(logo1, "\n Welcome to the blind auction.")
+print("If there is a tie, the person who bid first wins.\n")
+
+name_and_bid = {}
+more_users = True
+
+while more_users:
+    name = input("Please enter your name: ")
+    name_and_bid[name] = get_bid()
+
+    add_user = input("Are there any other bidders? Type 'yes' or 'no': ").strip().lower()
+    if add_user in ("no", "n"):
+        more_users = False
+
+    # Push the previous bid off screen so the next bidder can't see it
     print("\n" * 40)
 
-for key in name_and_bid:
-    if int(name_and_bid[key]) > max_bid:
-        max_bid = name_and_bid[key]
-        max_name = key
+# max() keeps the first highest bid it finds, so ties go to whoever bid first
+max_name = max(name_and_bid, key=name_and_bid.get)
+max_bid = name_and_bid[max_name]
 
 print(f"The winner is {max_name} with a {max_bid} SAR bid.")
-
-    
-
